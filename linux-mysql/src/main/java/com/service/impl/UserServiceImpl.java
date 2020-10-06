@@ -1,8 +1,12 @@
 package com.service.impl;
 
+import cn.hutool.core.util.PageUtil;
+import com.dao.AUserDao;
 import com.dao.UserDao;
+import com.model.AUser;
 import com.model.User;
 import com.service.UserService;
+import com.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,18 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
+    @Autowired
+    AUserDao AuserDao;
+
+    @Override
+    public PageResultUtil queryAUserByPage(int page, int pageSize) {
+        int count = AuserDao.queryPageCout();
+//        int totalPage = PageUtil.totalPage(count, pageSize);
+        int start = PageUtil.getStart(page, pageSize);
+//        int end = PageUtil.getEnd(page, pageSize);
+        List<AUser> aUsers = AuserDao.queryAllAUser(start,pageSize);
+        return new PageResultUtil(count,aUsers,page,pageSize);
+    }
 
     @Override
     public User findUserByName(String name) {

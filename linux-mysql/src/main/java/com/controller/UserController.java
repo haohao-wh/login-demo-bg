@@ -7,12 +7,17 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.enums.ResponseCode;
 import com.form.LoginForm;
+import com.form.PageForm;
 import com.model.User;
 import com.service.UserService;
+import com.util.PageResultUtil;
 import com.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -41,6 +46,11 @@ public class UserController {
     public ResultUtil queryAllUser() {
         List<User> allUser = userService.findAllUser();
         return ResultUtil.success(allUser, "查询所有数据");
+    }
+    @RequestMapping("queryAllAUser")
+    public ResultUtil queryAllAUser(@RequestBody PageForm pageForm) {
+        PageResultUtil aUsers = userService.queryAUserByPage(pageForm.getPage(), pageForm.getPageSize());
+        return ResultUtil.success(aUsers, "查询所有数据");
     }
 
     @RequestMapping("queryUserById")
